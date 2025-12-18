@@ -2,8 +2,10 @@ name: Fetch IRCC Draws
 
 on:
   schedule:
-    # Run daily at 10:00 AM UTC (adjust as needed)
-    - cron: '0 10 * * *'
+    # Run 3 times daily
+    - cron: '0 8 * * *'   # 8:00 AM UTC (Morning)
+    - cron: '0 13 * * *'  # 1:00 PM UTC (Afternoon)
+    - cron: '0 17 * * *'  # 5:00 PM UTC (Evening)
   workflow_dispatch: # Allow manual trigger
 
 permissions:

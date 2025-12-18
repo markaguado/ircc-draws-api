@@ -191,13 +191,15 @@ Create `vercel.json`:
 }
 ```
 
-#### Option 2: GitHub Actions
-Create `.github/workflows/fetch-draws.yml`:
+#### Option 2: GitHub Actions (Currently Configured)
+The project is configured to run 3 times daily via `.github/workflows/fetch-draws.yml`:
 ```yaml
 name: Fetch IRCC Draws
 on:
   schedule:
-    - cron: '0 10 * * *'  # Daily at 10 AM UTC
+    - cron: '0 8 * * *'   # 8:00 AM UTC (Morning)
+    - cron: '0 13 * * *'  # 1:00 PM UTC (Afternoon)
+    - cron: '0 17 * * *'  # 5:00 PM UTC (Evening)
   workflow_dispatch:
 
 jobs:
@@ -280,23 +282,216 @@ All successful responses should follow this structure:
 
 ## Deployment
 
-### Recommended Platforms
-1. **Vercel**: Zero-config deployment with serverless functions
-2. **Netlify**: Similar to Vercel with automatic builds
-3. **Railway**: Simple deployment with environment variables
-4. **Render**: Free tier available with auto-deploys
+Your API code is stored on GitHub but needs to be deployed to a serverless platform to actually run and be accessible via HTTP endpoints.
 
-### Deployment Steps (Vercel)
+### Why You Need to Deploy
+
+- **GitHub** = Storage for your code (like a recipe book)
+- **Vercel/Netlify** = Execution environment that runs your code (the kitchen)
+- The `/api` folder contains serverless functions that need to be executed, not just stored
+
+### Recommended Platforms
+
+1. **Vercel** ⭐ (Recommended) - Zero-config deployment with serverless functions
+2. **Netlify** - Similar to Vercel with automatic builds
+3. **Cloudflare Workers** - Edge computing platform (like the reference API: can-ee-draws)
+4. **Railway** - Simple deployment with environment variables
+5. **Render** - Free tier available with auto-deploys
+
+### Option 1: Deploy via Vercel Web Interface (Easiest)
+
+1. **Sign in to Vercel**
+   - Go to https://vercel.com
+   - Sign in with your GitHub account
+
+2. **Import Your Repository**
+   - Click "Add New" → "Project"
+   - Select `markaguado/ircc-draws-api` from your repositories
+   - Click "Import"
+
+3. **Configure Project (Use Defaults)**
+   - Framework Preset: Other
+   - Root Directory: `./`
+   - Build Command: (leave empty)
+   - Output Directory: (leave empty)
+   - Click "Deploy"
+
+4. **Get Your Live URL**
+   - After deployment completes, you'll get a URL like:
+   - `https://ircc-draws-api.vercel.app`
+   - Or: `https://ircc-draws-api-yourusername.vercel.app`
+
+5. **Test Your API**
+   ```bash
+   # Replace with your actual Vercel URL
+   curl https://ircc-draws-api.vercel.app/api/draws/latest
+   ```
+
+### Option 2: Deploy via Vercel CLI
+
 ```bash
-# Install Vercel CLI
+# Navigate to your project
+cd /path/to/ircc-draws-api
+
+# Install Vercel CLI globally
 npm install -g vercel
 
-# Deploy
+# Login to Vercel
+vercel login
+
+# Deploy (follow the prompts)
 vercel
 
-# Set environment variables
-vercel env add CRON_SECRET
+# For production deployment
+vercel --prod
 ```
+
+**First-time deployment prompts:**
+- Set up and deploy? **Y**
+- Which scope? Select your account
+- Link to existing project? **N**
+- What's your project's name? `ircc-draws-api`
+- In which directory is your code located? `./`
+- Want to override settings? **N**
+
+**Your API will be live at:**
+- Preview: `https://ircc-draws-api-xxx.vercel.app`
+- Production: `https://ircc-draws-api.vercel.app`
+
+### Option 3: Deploy to Netlify
+
+```bash
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Login to Netlify
+netlify login
+
+# Deploy
+netlify deploy
+
+# Production deploy
+netlify deploy --prod
+```
+
+### Option 4: Deploy to Cloudflare Workers
+
+For edge computing similar to the reference API (can-ee-draws):
+
+1. Install Wrangler CLI:
+```bash
+npm install -g wrangler
+```
+
+2. Configure `wrangler.toml`:
+```toml
+name = "ircc-draws-api"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+```
+
+3. Deploy:
+```bash
+wrangler deploy
+```
+
+### After Deployment
+
+#### 1. Update GitHub Actions (Optional)
+If you want to trigger deployments automatically, add to your workflow:
+
+```yaml
+- name: Deploy to Vercel
+  run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+```
+
+#### 2. Set Environment Variables (If Needed)
+
+For Vercel:
+```bash
+# Via CLI
+vercel env add CRON_SECRET
+
+# Or via web interface
+# Go to Project Settings → Environment Variables
+```
+
+#### 3. Test Your Live API
+
+```bash
+# Get latest draw
+curl https://your-app.vercel.app/api/draws/latest
+
+# Get all draws
+curl https://your-app.vercel.app/api/draws
+
+# Filter by year
+curl https://your-app.vercel.app/api/draws?year=2024
+
+# Get statistics
+curl https://your-app.vercel.app/api/draws/stats
+```
+
+### Using Your Deployed API
+
+Once deployed, use it in any project:
+
+**JavaScript/Node.js:**
+```javascript
+const API_URL = 'https://ircc-draws-api.vercel.app'
+
+// Get latest draw
+const response = await fetch(`${API_URL}/api/draws/latest`)
+const latestDraw = await response.json()
+console.log(`Latest CRS: ${latestDraw.minimumCRS}`)
+
+// Get all draws from 2025
+const draws2025 = await fetch(`${API_URL}/api/draws?year=2025`)
+const data = await draws2025.json()
+console.log(`Found ${data.count} draws in 2025`)
+```
+
+**Python:**
+```python
+import requests
+
+API_URL = 'https://ircc-draws-api.vercel.app'
+
+# Get latest draw
+response = requests.get(f'{API_URL}/api/draws/latest')
+latest = response.json()
+print(f"Latest CRS: {latest['minimumCRS']}")
+```
+
+**cURL:**
+```bash
+curl https://ircc-draws-api.vercel.app/api/draws/latest | jq
+```
+
+### Monitoring & Logs
+
+**Vercel:**
+- View logs: https://vercel.com/dashboard
+- Real-time function logs
+- Performance analytics
+
+**Netlify:**
+- View logs: https://app.netlify.com
+- Function logs and monitoring
+
+### Troubleshooting Deployment
+
+**Issue:** "Repository not found" or deployment fails
+- **Solution:** Ensure your GitHub repo is public or Vercel has access to private repos
+
+**Issue:** API endpoints return 404
+- **Solution:** Ensure `/api` folder structure is correct and files have default exports
+
+**Issue:** Functions timeout
+- **Solution:** Check function execution time limits (Vercel: 10s free tier, 60s pro)
+
+**Issue:** Data not updating
+- **Solution:** Verify GitHub Actions workflow ran successfully and committed `database/draws.json`
 
 ## Future Enhancements
 
