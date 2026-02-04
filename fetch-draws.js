@@ -6,21 +6,101 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 /**
+ * Fetch with timeout support
+ * Wraps fetch() with AbortController for timeout functionality
+ */
+async function fetchWithTimeout(url, options = {}) {
+  const { timeout = 30000 } = options // Default 30 second timeout
+
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), timeout)
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    })
+    clearTimeout(timeoutId)
+    return response
+  } catch (error) {
+    clearTimeout(timeoutId)
+    if (error.name === 'AbortError') {
+      throw new Error(`Request timeout after ${timeout}ms`)
+    }
+    throw error
+  }
+}
+
+/**
+ * Fetch with retry logic and exponential backoff
+ * Retries failed requests with increasing delays
+ */
+async function fetchWithRetry(url, options = {}, maxRetries = 3) {
+  let lastError
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      console.log(`Fetch attempt ${attempt}/${maxRetries}...`)
+
+      const response = await fetchWithTimeout(url, {
+        ...options,
+        timeout: 30000, // 30 second timeout per attempt
+        headers: {
+          'User-Agent': 'IRCC-Draws-API/1.0 (GitHub Actions; +https://github.com/markaguado/ircc-draws-api)',
+          'Accept': 'application/json',
+          'Accept-Encoding': 'gzip, deflate',
+          'Connection': 'keep-alive',
+          ...options.headers,
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+
+      console.log(`Fetch successful on attempt ${attempt}`)
+      return response
+
+    } catch (error) {
+      lastError = error
+      console.error(`Attempt ${attempt} failed: ${error.message}`)
+
+      // Don't retry on certain errors
+      if (error.message.includes('HTTP 4')) {
+        // 4xx errors are client errors, don't retry
+        throw error
+      }
+
+      // If this wasn't the last attempt, wait before retrying
+      if (attempt < maxRetries) {
+        // Exponential backoff: 2s, 4s, 8s
+        const delayMs = Math.pow(2, attempt) * 1000
+        console.log(`Waiting ${delayMs}ms before retry...`)
+        await new Promise(resolve => setTimeout(resolve, delayMs))
+      }
+    }
+  }
+
+  // All retries exhausted
+  throw new Error(`Failed after ${maxRetries} attempts: ${lastError.message}`)
+}
+
+/**
  * Standalone script to fetch IRCC Express Entry draws
  * Used by GitHub Actions for automated data fetching
  */
 async function fetchDraws() {
   console.log('Starting IRCC draws fetch from official API...')
+  console.log(`Timestamp: ${new Date().toISOString()}`)
 
   try {
-    // Fetch data from IRCC's official JSON API
+    // Fetch data from IRCC's official JSON API with retry logic
     console.log('Fetching data from IRCC API...')
-    const response = await fetch('https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json')
+    const response = await fetchWithRetry(
+      'https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json'
+    )
 
-    if (!response.ok) {
-      throw new Error(`IRCC API returned ${response.status}: ${response.statusText}`)
-    }
-
+    console.log('Parsing JSON response...')
     const data = await response.json()
 
     if (!data.rounds || !Array.isArray(data.rounds)) {
