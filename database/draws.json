@@ -1,8 +1,38 @@
 {
-  "lastUpdated": "2026-01-16T17:18:27.685Z",
+  "lastUpdated": "2026-02-05T08:33:29.563Z",
   "source": "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json",
-  "totalDraws": 391,
+  "totalDraws": 394,
   "draws": [
+    {
+      "round_number": 393,
+      "draw_date": "2026-02-03",
+      "round_type": "Program-specific",
+      "invitations_issued": 423,
+      "crs_score": 749,
+      "program_category": "PNP",
+      "notes": "Provincial Nominee Program",
+      "data_source": "ircc_api"
+    },
+    {
+      "round_number": 392,
+      "draw_date": "2026-01-21",
+      "round_type": "Category-based",
+      "invitations_issued": 6000,
+      "crs_score": 509,
+      "program_category": "CEC",
+      "notes": "Canadian Experience Class",
+      "data_source": "ircc_api"
+    },
+    {
+      "round_number": 391,
+      "draw_date": "2026-01-20",
+      "round_type": "Program-specific",
+      "invitations_issued": 681,
+      "crs_score": 746,
+      "program_category": "PNP",
+      "notes": "Provincial Nominee Program",
+      "data_source": "ircc_api"
+    },
     {
       "round_number": 390,
       "draw_date": "2026-01-07",
