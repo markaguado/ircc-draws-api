@@ -1,8 +1,18 @@
 {
-  "lastUpdated": "2026-02-17T14:00:29.390Z",
+  "lastUpdated": "2026-02-17T17:50:22.283Z",
   "source": "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json",
-  "totalDraws": 396,
+  "totalDraws": 397,
   "draws": [
+    {
+      "round_number": 396,
+      "draw_date": "2026-02-17",
+      "round_type": "Category-based",
+      "invitations_issued": 6000,
+      "crs_score": 508,
+      "program_category": "CEC",
+      "notes": "Canadian Experience Class",
+      "data_source": "ircc_api"
+    },
     {
       "round_number": 395,
       "draw_date": "2026-02-16",
