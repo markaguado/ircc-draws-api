@@ -1,8 +1,18 @@
 {
-  "lastUpdated": "2026-02-19T17:43:31.235Z",
+  "lastUpdated": "2026-02-20T08:32:12.355Z",
   "source": "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json",
-  "totalDraws": 397,
+  "totalDraws": 398,
   "draws": [
+    {
+      "round_number": 397,
+      "draw_date": "2026-02-19",
+      "round_type": "General",
+      "invitations_issued": 391,
+      "crs_score": 169,
+      "program_category": null,
+      "notes": "Physicians with Canadian Work Experience, 2026-Version 1",
+      "data_source": "ircc_api"
+    },
     {
       "round_number": 396,
       "draw_date": "2026-02-17",
