@@ -1,8 +1,18 @@
 {
-  "lastUpdated": "2026-03-05T13:55:05.114Z",
+  "lastUpdated": "2026-03-05T18:46:18.950Z",
   "source": "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json",
-  "totalDraws": 402,
+  "totalDraws": 403,
   "draws": [
+    {
+      "round_number": 402,
+      "draw_date": "2026-03-05",
+      "round_type": "General",
+      "invitations_issued": 250,
+      "crs_score": 429,
+      "program_category": null,
+      "notes": "Senior managers with Canadian Work Experience, 2026-Version 1",
+      "data_source": "ircc_api"
+    },
     {
       "round_number": 401,
       "draw_date": "2026-03-04",
