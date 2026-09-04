@@ -1,8 +1,18 @@
 {
-  "lastUpdated": "2026-09-04T12:23:24.392Z",
+  "lastUpdated": "2026-09-04T16:38:51.734Z",
   "source": "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json",
-  "totalDraws": 441,
+  "totalDraws": 442,
   "draws": [
+    {
+      "round_number": 441,
+      "draw_date": "2026-09-04",
+      "round_type": "Category-based",
+      "invitations_issued": 3500,
+      "crs_score": 475,
+      "program_category": "Healthcare",
+      "notes": "Healthcare and Social Services Occupations, 2026-Version 3",
+      "data_source": "ircc_api"
+    },
     {
       "round_number": 440,
       "draw_date": "2026-09-03",
