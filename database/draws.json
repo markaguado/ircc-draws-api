@@ -1,8 +1,18 @@
 {
-  "lastUpdated": "2026-09-13T19:08:03.356Z",
+  "lastUpdated": "2026-09-14T14:35:12.982Z",
   "source": "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json",
-  "totalDraws": 442,
+  "totalDraws": 443,
   "draws": [
+    {
+      "round_number": 442,
+      "draw_date": "2026-09-14",
+      "round_type": "Program-specific",
+      "invitations_issued": 576,
+      "crs_score": 734,
+      "program_category": "PNP",
+      "notes": "Provincial Nominee Program",
+      "data_source": "ircc_api"
+    },
     {
       "round_number": 441,
       "draw_date": "2026-09-04",
