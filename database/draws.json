@@ -1,8 +1,18 @@
 {
-  "lastUpdated": "2026-10-27T13:48:19.718Z",
+  "lastUpdated": "2026-10-27T18:27:48.875Z",
   "source": "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json",
-  "totalDraws": 452,
+  "totalDraws": 453,
   "draws": [
+    {
+      "round_number": 452,
+      "draw_date": "2026-10-27",
+      "round_type": "Category-based",
+      "invitations_issued": 5000,
+      "crs_score": 407,
+      "program_category": "French-language",
+      "notes": "French-Language proficiency 2026-Version 2",
+      "data_source": "ircc_api"
+    },
     {
       "round_number": 451,
       "draw_date": "2026-10-26",
