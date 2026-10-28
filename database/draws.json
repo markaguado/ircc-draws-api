@@ -1,8 +1,18 @@
 {
-  "lastUpdated": "2026-10-27T21:02:42.289Z",
+  "lastUpdated": "2026-10-28T14:43:08.843Z",
   "source": "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json",
-  "totalDraws": 453,
+  "totalDraws": 454,
   "draws": [
+    {
+      "round_number": 453,
+      "draw_date": "2026-10-28",
+      "round_type": "Category-based",
+      "invitations_issued": 150,
+      "crs_score": 477,
+      "program_category": "Transport",
+      "notes": "Transport Occupations, 2026-Version 2",
+      "data_source": "ircc_api"
+    },
     {
       "round_number": 452,
       "draw_date": "2026-10-27",
